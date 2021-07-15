@@ -2693,3 +2693,23 @@ var customSortString = function (order, str) {
     order.split('').map((c, i) => map[c] = i);
     return str.split('').sort((c1, c2) => (map[c1] ?? 30) - (map[c2] ?? 30)).join('');
 };
+
+var triangleNumber = function (nums) {
+    nums.sort((a, b) => a - b);
+    let counter = 0;
+
+    for (let x = 0; x < nums.length - 2; x++) {
+        for (let y = x + 1; y < nums.length - 1; y++) {
+            let target = nums[x] + nums[y]
+            let low = y, high = nums.length - 1;
+
+            while (low < high) {
+                const mid = Math.ceil((low + high) / 2);
+                if (nums[mid] >= target) high = mid - 1;
+                else low = mid;
+            }
+            counter += (low - y);
+        }
+    }
+    return counter;
+};
