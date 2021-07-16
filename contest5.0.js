@@ -2713,3 +2713,34 @@ var triangleNumber = function (nums) {
     }
     return counter;
 };
+
+const fourSum = (nums, tar) => {
+    nums.sort((a, b) => a - b);
+    return kSum(nums, tar, 0, 4);
+};
+
+const kSum = (nums, tar, start, k) => {
+    const res = [];
+    if (start === nums.length || nums[start] * k > tar || tar > nums[nums.length - 1] * k) return res;
+    if (k === 2) return twoSum(nums, tar, start);
+    for (let i = start; i < nums.length; i++) {
+        if (i === start || nums[i] !== nums[i - 1]) {
+            for (let set of kSum(nums, tar - nums[i], i + 1, k - 1)) {
+                set.push(nums[i]);
+                res.push(set);
+            }
+        }
+    }
+    return res;
+};
+
+const twoSum = (nums, tar, start) => {
+    const res = [];
+    const set = new Set();
+    for (let i = start; i < nums.length; i++) {
+        if (!res.length || res[res.length - 1][1] !== nums[i])
+            if (set.has(tar - nums[i])) res.push([tar - nums[i], nums[i]]);
+        set.add(nums[i]);
+    }
+    return res;
+};
