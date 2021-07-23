@@ -2877,3 +2877,23 @@ var pushDominoes = function (dominoes) {
     }
     return arr.slice(1, arr.length - 1).join("");
 };
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var partitionDisjoint = function (A) {
+    let maxLeft = A[0];
+    let maxSoFar = A[0]
+    let pivot = 0;
+    for (let i = 1; i < A.length; i++) {
+        if (A[i] > maxSoFar) {
+            maxSoFar = A[i];
+        }
+        if (A[i] < maxLeft) {
+            maxLeft = maxSoFar;
+            pivot = i;
+        }
+    }
+    return pivot + 1;
+};
