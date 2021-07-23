@@ -2897,3 +2897,25 @@ var partitionDisjoint = function (A) {
     }
     return pivot + 1;
 };
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var pruneTree = function (root) {
+    //pruning left and right, if they are available
+    //if you have base case check as in -> if(!root) return null, then no need of the && condition
+    root.left = root.left && pruneTree(root.left);
+    root.right = root.right && pruneTree(root.right);
+
+    //if all conditions are met, prune(return null) else keep the node
+    return (root.val === 0 && !root.left && !root.right) ? null : root;
+};
