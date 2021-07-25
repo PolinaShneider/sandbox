@@ -2919,3 +2919,57 @@ var pruneTree = function (root) {
     //if all conditions are met, prune(return null) else keep the node
     return (root.val === 0 && !root.left && !root.right) ? null : root;
 };
+
+/**
+ * @param {string[]} words
+ * @return {string}
+ */
+function alienOrder(words) {
+    let uniqueCharCount = new Set(), indegree = {}, dependencyArray = [], indegreeQueue = [], uniqueCharString = "";
+
+    //Collect all unique characters and initialize indegree object
+    for (let word of words) {
+        for (let char of word) {
+            if (!uniqueCharCount.has(char)) {
+                uniqueCharCount.add(char);
+                indegree[char] = 0;
+            }
+        }
+    }
+    //Populate indegree object with incoming edges
+    for (let i = 0; i < words.length - 1; i++) {
+        if (words[i].startsWith(words[i + 1]) && words[i].length > words[i + 1].length) {
+            return "";
+        }
+        let minWordLength = Math.min(words[i].length, words[i + 1].length), differenceFound = false;
+        for (let j = 0; j < minWordLength && !differenceFound; j++) {
+            if (words[i][j] !== words[i + 1][j]) {
+                dependencyArray.push([words[i + 1][j], words[i][j]]);
+                indegree[words[i + 1][j]]++;
+                differenceFound = true;
+            }
+        }
+    }
+    //Build return string with characters that have 0 incoming edges
+    for (let key in indegree) {
+        if (indegree[key] === 0) {
+            indegreeQueue.push(key);
+            uniqueCharString += key;
+        }
+    }
+    //Conduct BFS to remove incoming edges for each character and append characters with 0 incoming edges to the return string
+    while (indegreeQueue.length) {
+        let currentNode = indegreeQueue.shift();
+        for (let i = 0; i < dependencyArray.length; i++) {
+            if (dependencyArray[i][1] === currentNode) {
+                indegree[dependencyArray[i][0]]--;
+                if (indegree[dependencyArray[i][0]] === 0) {
+                    indegreeQueue.push(dependencyArray[i][0]);
+                    uniqueCharString += dependencyArray[i][0];
+                }
+            }
+        }
+    }
+    //Return the return string if the length is the same as the count of unique characters, else return empty string
+    return uniqueCharString.length === uniqueCharCount.size ? uniqueCharString : "";
+};
