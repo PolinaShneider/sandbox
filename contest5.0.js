@@ -3153,3 +3153,66 @@ var updateMatrix = function (matrix) {
     return result;
 };
 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var longestConsecutive = function (root) {
+    if (!root) return 0;
+
+    function connected(node, prev, isGreater) {
+        if (!node) return 0;
+        if (isGreater) {
+            if (node.val === prev + 1) {
+                let leftConnected = connected(node.left, node.val, isGreater);
+                let rightConnected = connected(node.right, node.val, isGreater);
+                return 1 + Math.max(leftConnected, rightConnected)
+            }
+        } else {
+            if (node.val === prev - 1) {
+                let leftConnected = connected(node.left, node.val, isGreater);
+                let rightConnected = connected(node.right, node.val, isGreater);
+                return 1 + Math.max(leftConnected, rightConnected)
+            }
+        }
+        return 0; // the rest not connected
+    }
+
+    // left connected+1 (a)
+    let a = connected(root.left, root.val, true);
+    // left connected-1 (b)
+    let b = connected(root.left, root.val, false);
+    // left not connected (c)
+    let c = longestConsecutive(root.left);
+
+    // right connected+1 (d)
+    let d = connected(root.right, root.val, true);
+    // right connected-1 (e)
+    let e = connected(root.right, root.val, false);
+    // right not connected (f)
+    let f = longestConsecutive(root.right);
+
+    //case1 a+e
+    let case1 = a + e + 1;
+    //case2 b+d
+    let case2 = b + d + 1;
+    //case3 c or f
+    let case3 = Math.max(c, f);
+
+    return Math.max(case1, case2, case3);
+};
