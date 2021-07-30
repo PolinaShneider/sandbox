@@ -3088,3 +3088,68 @@ var beautifulArray = function (n) {
     return helper(arr);
 };
 
+/**
+ * @param {number[][]} matrix
+ * @return {number[][]}
+ */
+var updateMatrix = function (matrix) {
+    const result = new Array(matrix.length);
+
+    for (let i = 0; i < result.length; i++) {
+        result[i] = new Array(matrix[0].length).fill(Infinity);
+    }
+
+    const queue = [];
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[0].length; j++) {
+            if (matrix[i][j] === 0) {
+                result[i][j] = 0;
+                queue.push([i, j]);
+            }
+        }
+    }
+
+    while (queue.length) {
+        const [i, j] = queue.shift();
+        const current = result[i][j];
+
+        if (matrix[i] !== undefined && matrix[i][j + 1] !== undefined) {
+            const changed = Math.min(current + 1, result[i][j + 1]);
+
+            if (result[i][j + 1] !== changed) {
+                result[i][j + 1] = changed;
+                queue.push([i, j + 1])
+            }
+        }
+
+        if (matrix[i] !== undefined && matrix[i][j - 1] !== undefined) {
+            const changed = Math.min(current + 1, result[i][j - 1]);
+
+            if (result[i][j - 1] !== changed) {
+                result[i][j - 1] = changed;
+                queue.push([i, j - 1])
+            }
+        }
+
+        if (matrix[i - 1] !== undefined && matrix[i - 1][j] !== undefined) {
+            const changed = Math.min(current + 1, result[i - 1][j]);
+
+            if (result[i - 1][j] !== changed) {
+                result[i - 1][j] = changed;
+                queue.push([i - 1, j])
+            }
+        }
+
+        if (matrix[i + 1] !== undefined && matrix[i + 1][j] !== undefined) {
+            const changed = Math.min(current + 1, result[i + 1][j]);
+
+            if (result[i + 1][j] !== changed) {
+                result[i + 1][j] = changed;
+                queue.push([i + 1, j])
+            }
+        }
+    }
+
+    return result;
+};
+
