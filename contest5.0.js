@@ -3216,3 +3216,17 @@ var longestConsecutive = function (root) {
 
     return Math.max(case1, case2, case3);
 };
+
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+function trap(height) {
+    let level = 0, result = 0;
+    for (let left = 0, right = height.length - 1; left < right;) {
+        let lower = height[height[left] < height[right] ? left++ : right--];
+        level = Math.max(level, lower);
+        result += level - lower;
+    }
+    return result;
+}
