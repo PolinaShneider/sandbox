@@ -3230,3 +3230,36 @@ function trap(height) {
     }
     return result;
 }
+
+/**
+ * @param {number} n
+ * @param {number[]} wells
+ * @param {number[][]} pipes
+ * @return {number}
+ */
+var minCostToSupplyWater = function (n, wells, pipes) {
+    let uf = Array(n + 1).fill(0)
+    let edges = []
+    for (let i = 0; i < n; i++) {
+        uf[i + 1] = i + 1
+        edges.push([0, i + 1, wells[i]])
+    }
+    for (let p of pipes) {
+        edges.push(p)
+    }
+    edges.sort((a, b) => a[2] - b[2])
+    let res = 0
+    let find = function (x) {
+        if (x !== uf[x])
+            uf[x] = find(uf[x])
+        return uf[x]
+    };
+    for (let e of edges) {
+        let x = find(e[0]), y = find(e[1])
+        if (x !== y) {
+            res += e[2]
+            uf[x] = y
+        }
+    }
+    return res
+};
