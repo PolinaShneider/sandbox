@@ -3278,3 +3278,23 @@ var twoSum = function (nums, target) {
         }
     }
 };
+
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = function (nums) {
+    const result = {};
+    for (let i = 0; i < Math.pow(2, nums.length); i++) {
+        const temp = [];
+        for (let j = 0; j < nums.length; j++) {
+            // & is bitwise AND
+            if ((i & Math.pow(2, j))) {
+                temp.push(nums[j])
+            }
+        }
+        const key = temp.sort((a, b) => a - b).join(',');
+        result[key] = temp;
+    }
+    return Object.values(result)
+};
