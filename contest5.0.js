@@ -3347,3 +3347,38 @@ var stoneGame = function (piles) {
     }
     return dp[0][n - 1] > 0;
 };
+
+/**
+ * // Definition for a Node.
+ * function Node(val,children) {
+ *    this.val = val;
+ *    this.children = children;
+ * };
+ */
+/**
+ * @param {Node} root
+ * @return {number[][]}
+ */
+var levelOrder = function (root) {
+    if (!root) {
+        return [];
+    }
+
+    const stack = [[root, 0]];
+    const map = {};
+    while (stack.length) {
+        const [current, level] = stack.pop();
+        for (let elem of current.children) {
+            stack.push([elem, level + 1])
+        }
+
+        if (map[level]) {
+            map[level].unshift(current.val)
+        } else {
+            map[level] = [current.val];
+        }
+
+    }
+
+    return Object.values(map);
+};
