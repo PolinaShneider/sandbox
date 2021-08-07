@@ -3382,3 +3382,41 @@ var levelOrder = function (root) {
 
     return Object.values(map);
 };
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+/**
+ * @param {string} s
+ * @return {number}
+ */
+let minCache;
+var minCut = function (s) {
+    minCache = Array(s.length).fill(-1);
+    let min = dfs(0, s);
+    return min - 1;
+};
+
+const dfs = (start, s) => {
+    if (start >= s.length) {
+        return 0;
+    }
+    if (minCache[start] !== -1) return minCache[start];
+    let ret = Infinity;
+    for (let end = start; end < s.length; end++) {
+        if (isPalindrome(s, start, end)) {
+            let temp = dfs(end + 1, s);
+            ret = Math.min(ret, temp);
+        }
+    }
+    minCache[start] = ret + 1;
+    return ret + 1;
+}
+
+const isPalindrome = (s, low, high) => {
+    while (low < high) {
+        if (s.charAt(low++) !== s.charAt(high--)) return false;
+    }
+    return true;
+}
