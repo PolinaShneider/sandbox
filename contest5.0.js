@@ -3436,3 +3436,37 @@ var numWays = function (n, k) {
     }
     return ways.pop();
 };
+
+/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var addStrings = function (num1, num2) {
+    const N = Math.max(num1.length, num2.length);
+    let carryOver = 0, result = '';
+
+    // Add leading zeros
+    if (num1.length > num2.length) {
+        num2 = num2.padStart(num1.length, '0');
+    } else if (num1.length < num2.length) {
+        num1 = num1.padStart(num2.length, '0');
+    }
+
+    for (let i = N - 1; i >= 0; i--) {
+        let sum = +num1[i] + +num2[i] + carryOver;
+
+        if (carryOver) {
+            carryOver--;
+        }
+
+        if (sum > 9) {
+            carryOver++;
+        }
+
+        result = sum % 10 + result;
+    }
+
+    return (carryOver) ? '1' + result : result;
+};
+
