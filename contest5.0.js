@@ -3470,3 +3470,21 @@ var addStrings = function (num1, num2) {
     return (carryOver) ? '1' + result : result;
 };
 
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minFlipsMonoIncr = function (s) {
+    // dp[0] - min flips to have 0
+    // dp[1] - min flips to have 1
+    let dp = [0, 0];
+    let idx = s.length;
+    while (idx--) {
+        let val = +s[idx];
+        // after 0 we can have 0 or 1, select a way with minimum flips
+        dp[0] = val + Math.min(dp[0], dp[1]);
+        // after 1 we can have only 1; add 1 if current char is '0'
+        dp[1] += (1 - val);
+    }
+    return Math.min(dp[0], dp[1]);
+};
