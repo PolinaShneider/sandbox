@@ -3529,5 +3529,24 @@ var canReorderDoubled = function (arr) {
         }
     }
     return true
-}
+};
+
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function (strs) {
+    const map = {};
+
+    for (let str of strs) {
+        const key = str.split('').sort().join('');
+        if (key in map) {
+            map[key].push(str);
+        } else {
+            map[key] = [str]
+        }
+    }
+
+    return Object.values(map)
+};
 
