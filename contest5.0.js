@@ -3577,3 +3577,41 @@ var setZeroes = function (matrix) {
     }
 };
 
+/**
+ * @param {number[]} boxes
+ * @return {number}
+ */
+var removeBoxes = function (boxes) {
+    if (boxes.length === 1) return boxes[0] ** 2;
+    let memo = {};
+    return dfs(0, boxes.length - 1, 0);
+
+    //k consecutive boxes in front of i
+    function dfs(i, j, k) {
+        if (i in memo && j in memo[i] && k in memo[i][j]) return memo[i][j][k];
+        let res = 0;
+        if (i > j) return 0;
+        let cnt = 0;
+        // at least one time because cnt = 0
+        while (i + cnt <= j && boxes[i] === boxes[i + cnt]) cnt++;
+        let i2 = i + cnt;
+        res = dfs(i2, j, 0) + (k + cnt) ** 2;
+        for (let m = i2; m < j + 1; m++) {
+            if (boxes[m] === boxes[i])
+                res = Math.max(res, dfs(i2, m - 1, 0) + dfs(m, j, k + cnt));
+        }
+        if (i in memo) {
+            if (j in memo[i]) memo[i][j][k] = res;
+            else {
+                memo [i][j] = [];
+                memo [i][j][k] = res;
+            }
+        } else {
+            memo[i] = [];
+            memo[i][j] = [];
+            memo[i][j][k] = res;
+        }
+        return res;
+    }
+};
+
