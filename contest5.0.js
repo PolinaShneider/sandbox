@@ -2590,13 +2590,13 @@ var numDecodings = function (s) {
     let mod = Math.pow(10, 9) + 7;
     let dp = new Array(len + 1).fill(0);
     dp[0] = 1;
-    if (s[0] == 0) dp[1] = 0;
-    else if (s[0] == '*') dp[1] = 9;
+    if (s[0] === 0) dp[1] = 0;
+    else if (s[0] === '*') dp[1] = 9;
     else dp[1] = 1;
     for (let i = 2; i <= len; i++) {
-        if (s[i - 1] == '*') {
+        if (s[i - 1] === '*') {
             dp[i] += 9 * dp[i - 1];
-        } else if (s[i - 1] != 0 && s[i - 1] != '*') {
+        } else if (s[i - 1] !== 0 && s[i - 1] !== '*') {
             dp[i] += dp[i - 1];
         }
         if (s[i - 2] == 1) {
@@ -3708,4 +3708,36 @@ var numDecodings = function (s, i = 0, memo = {}) {
     memo[i] = numDecodings(s, i + 1, memo)
         + (s[i] + s[i + 1] < 27 ? numDecodings(s, i + 2, memo) : 0);
     return memo[i];
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+let subtreeSum;
+const mod = 1e9 + 7;
+const maxProduct = (root) => {
+    subtreeSum = [];
+    let tot = dfs(root);
+    let res = 0;
+    for (const x of subtreeSum) {
+        let another = tot - x;
+        res = Math.max(res, x * another);
+    }
+    return res % mod;
+};
+
+const dfs = (node) => {
+    if (!node) return 0;
+    let sum = node.val + dfs(node.left) + dfs(node.right);
+    subtreeSum.push(sum);
+    return sum;
 };
