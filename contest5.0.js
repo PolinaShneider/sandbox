@@ -3741,3 +3741,42 @@ const dfs = (node) => {
     subtreeSum.push(sum);
     return sum;
 };
+
+/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function (board) {
+    var rows = [], cols = [], box = [];
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] !== ".") {
+                if (rows[i] !== undefined && rows[i][board[i][j]] !== undefined) {
+                    return false;
+                }
+                if (rows[i] === undefined) {
+                    rows[i] = {};
+                }
+                rows[i][board[i][j]] = true;
+
+                if (cols[j] !== undefined && cols[j][board[i][j]] !== undefined) {
+                    return false;
+                }
+                if (cols[j] === undefined) {
+                    cols[j] = {};
+                }
+                cols[j][board[i][j]] = true;
+
+                let boxIndex = (Math.floor(i / 3) * 3) + Math.floor(j / 3);
+                if (box[boxIndex] !== undefined && box[boxIndex][board[i][j]] !== undefined) {
+                    return false;
+                }
+                if (box[boxIndex] === undefined) {
+                    box[boxIndex] = {};
+                }
+                box[boxIndex][board[i][j]] = true;
+            }
+        }
+    }
+    return true;
+};
