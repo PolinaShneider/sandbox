@@ -3831,3 +3831,64 @@ const isValid = (board, row, col, c) => {
 
     return true;
 };
+
+/**
+ * @param {number[][]} rectangles
+ * @return {number}
+ */
+const mod = 1e9 + 7;
+const rectangleArea = function (rectangles) {
+    //compress coordinates
+    let xMap = {}, yMap = {};
+
+    let x = new Set(), y = new Set();
+
+    for (let [x1, y1, x2, y2] of rectangles) {
+        x.add(x1);
+        x.add(x2);
+        y.add(y1);
+        y.add(y2);
+    }
+
+    x = [...x].sort((a, b) => a - b);
+    y = [...y].sort((a, b) => a - b);
+
+    for (let i = 0; i < x.length; i++)
+        xMap[x[i]] = i;
+
+    for (let i = 0; i < y.length; i++)
+        yMap[y[i]] = i;
+
+    let canvas = new Array(x.length).fill().map(v => new Array(y.length).fill(0));
+
+    for (let rectangle of rectangles)
+        paint(rectangle);
+
+
+    let res = 0;
+    for (let i = 0; i < canvas.length; i++) {
+        for (let j = 0; j < canvas[i].length; j++) {
+            if (canvas[i][j]) {
+                res += getArea(i, j);
+                res %= mod;
+            }
+        }
+    }
+
+    return res;
+
+    function getArea(i, j) {
+        let area = (x[i + 1] - x[i]) * (y[j + 1] - y[j]);
+
+        return area % mod;
+    }
+
+    function paint([x1, y1, x2, y2]) {
+        for (let i = xMap[x1]; i < xMap[x2]; i++) {
+            for (let j = yMap[y1]; j < yMap[y2]; j++) {
+                canvas[i][j] = 1;
+            }
+        }
+    }
+
+};
