@@ -3892,3 +3892,41 @@ const rectangleArea = function (rectangles) {
     }
 
 };
+
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {boolean}
+ */
+var validTree = function (n, edges) {
+    //graph to be valid tree, it has to be n-1 edges
+    if (edges.length !== n - 1) return false;
+
+    //build the graph
+    //1. adj list
+    const graph = new Map();
+    for (let i = 0; i < n; i++) {
+        graph.set(i, []);
+    }
+    //2. edges
+    for (let [from, to] of edges) {
+        graph.get(from).push(to);
+        graph.get(to).push(from);
+    }
+
+    //iterative traversal
+    const seen = new Set();
+    const stack = [0];
+    while (stack.length) {
+        const node = stack.pop();
+        seen.add(node);
+
+        for (let nei of graph.get(node)) {
+            if (!seen.has(nei)) {
+                stack.push(nei);
+            }
+        }
+    }
+
+    return seen.size === n;
+};
