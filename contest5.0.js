@@ -3952,6 +3952,21 @@ var complexNumberMultiply = function (num1, num2) {
     let d = parseInt(num2Parts[1]);
     let realPart = a * c - b * d;
     let imaginaryPart = a * d + b * c;
-    let ans = "" + realPart + "+" + imaginaryPart + "i";
-    return ans;
+    return "" + realPart + "+" + imaginaryPart + "i";
+};
+
+/**
+ * @param {number} c
+ * @return {boolean}
+ */
+var judgeSquareSum = function (c) {
+    for (let i = 0; i * i <= c; i++) {
+        let diff = c - i * i;
+        let sqrt = Math.sqrt(diff);
+        if (Math.floor(sqrt) === sqrt) {
+            return true;
+        }
+    }
+
+    return false;
 };
