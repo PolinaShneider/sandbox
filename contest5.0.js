@@ -3970,3 +3970,22 @@ var judgeSquareSum = function (c) {
 
     return false;
 };
+
+/**
+ * @param {string} preorder
+ * @return {boolean}
+ */
+var isValidSerialization = function (preorder) {
+    var stack = [];
+    var arr = preorder.split(",");
+    var vacancy = 1;
+    for (let i = 0; i < arr.length; i++) {
+        vacancy--;
+        if (vacancy < 0) return false;
+
+        if (arr[i] !== "#") {
+            vacancy += 2
+        }
+    }
+    return vacancy === 0
+};
