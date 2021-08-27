@@ -3989,3 +3989,46 @@ var isValidSerialization = function (preorder) {
     }
     return vacancy === 0
 };
+
+/**
+ * @param {string[]} strs
+ * @return {number}
+ */
+var findLUSlength = function (strs) {
+    const map = new Map();
+    const len1 = [];
+    const other = [];
+    for (let i of strs) {
+        map.set(i, map.get(i) + 1 || 1)
+    }
+    const temp = [...map.keys()].sort((a, b) => b.length - a.length);
+    for (let i of temp) {
+        if (map.get(i) === 1) {
+            len1.push(i)
+        } else {
+            other.push(i)
+        }
+    }
+    if (other.length === 0) return len1[0].length
+
+    for (let i of len1) {
+        for (let j of other) {
+            if (i.length >= j.length) {
+                return i.length
+            } else {
+                let first = 0;
+                let sec = 0;
+                while (first < i.length && sec < j.length) {
+                    if (i[first] === j[sec]) {
+                        first++
+                    }
+                    sec++
+                }
+
+                if (first === i.length) break;
+                return i.length
+            }
+        }
+    }
+    return -1
+};
